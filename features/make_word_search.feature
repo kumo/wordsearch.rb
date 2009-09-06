@@ -15,19 +15,27 @@ Feature: making a wordsearch
 
   Scenario: non-square grid
     Given there are no words
-    When I generate a 5 by 3 word search
+    When I generate a 4 by 3 word search
     Then I should see the following word search:
-      | . . . . . |
-      | . . . . . |
-      | . . . . . |
+      | . . . . |
+      | . . . . |
+      | . . . . |
   
   Scenario: forced position
-    Given there are words horrible
+    Given there are words longword
     When I generate a 8 by 1 word search
     Then I should see the following word search:
-      | H O R R I B L E |
+      | L O N G W O R D |
+
+  Scenario: no overlapping
+    Given there are words red
+    And I have the grid
+      | r e d . . . |
+    When I generate a 6 by 1 word search
+    Then I should see the following word search:
+      | r e d R E D |
 
   Scenario: invalid size
-    Given there are words fishcakes,purple
+    Given there are words longlonglongword,evenmuchlongerthanbeforeword
     When I generate a 1 by 5 word search
     Then the word search should not be valid

@@ -6,6 +6,15 @@ Given /^there are words (.*)$/ do |words|
   @ws = WordSearch.new(words.split(','))
 end
 
+Given /^I have the grid$/ do |table|
+  width = table.raw[0][0].split(' ').size
+  height = table.raw.size
+  
+  puts "we have a #{width} by #{height} table"
+  
+  @ws.add_grid(table.raw, width, height)
+end
+
 When /^I generate a (\d+) by (\d+) word search$/ do |x, y|
   @ws.generate(x.to_i, y.to_i)
 end
@@ -20,3 +29,8 @@ Then /^the word search should not be valid$/ do
   return @ws.valid?
 end
 
+Then /^each row should have (\d+) spaces$/ do |count|
+  for row in @ws.to_a do
+    row.count('.').should == count.to_i
+  end
+end
