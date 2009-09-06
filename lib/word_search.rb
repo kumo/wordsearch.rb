@@ -99,4 +99,24 @@ class WordSearch
       @grid << row
     end
   end
+  
+  def height
+    @last_height
+  end
+  
+  def width
+    @last_width
+  end
+  
+  def available_spaces_for_row(i)
+    row = @grid[i].join
+    spaces = row.scan(/\.+/).map{|group| group.size}
+
+    spaces == [] ? [0] : spaces
+  end
+  
+  def maximum_word_length_for_row(i)
+    spaces = available_spaces_for_row(i)
+    spaces.sort[-1]
+  end
 end

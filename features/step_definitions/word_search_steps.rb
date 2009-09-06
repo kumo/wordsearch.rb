@@ -30,7 +30,21 @@ Then /^the word search should not be valid$/ do
 end
 
 Then /^each row should have (\d+) spaces$/ do |count|
-  for row in @ws.to_a do
-    row.count('.').should == count.to_i
+  @ws.height.times do |i|
+    @ws.available_spaces_for_row(i).should == [count.to_i]
+  end
+end
+
+Then /^the largest word for each row is (\d+) characters$/ do |count|
+  @ws.height.times do |i|
+    @ws.maximum_word_length_for_row(i).should == count.to_i
+  end
+end
+
+Then /^the longest word for each line should be as follows:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  table.raw.size.times do |i|
+    row = table.raw[i]
+    @ws.maximum_word_length_for_row(i).should == row[0].to_i
   end
 end
