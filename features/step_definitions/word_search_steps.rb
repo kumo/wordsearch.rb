@@ -1,24 +1,22 @@
 Given /^there are no words$/ do
-  @words = []
+  @ws = WordSearch.new
 end
 
 Given /^there are words (.*)$/ do |words|
-  @words = []
-  words.split(',').each do |word|
-    @words << word
-  end
+  @ws = WordSearch.new(words.split(','))
 end
 
 When /^I generate a (\d+) by (\d+) word search$/ do |x, y|
-  pending
+  @ws.generate(x.to_i, y.to_i)
 end
 
 Then /^I should see the following word search:$/ do |table|
   # table is a Cucumber::Ast::Table
   #p table.raw 
-  pending
+  table.diff!(@ws.to_a)
 end
 
-Then /^I should see an error$/ do
-  pending
+Then /^the word search should not be valid$/ do
+  return @ws.valid?
 end
+

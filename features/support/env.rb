@@ -1,2 +1,2 @@
-#require 'lib/word_search'
+require 'lib/word_search'
 require 'spec/expectations'
