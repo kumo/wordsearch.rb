@@ -35,7 +35,16 @@ Feature: making a wordsearch
     When I generate a 6 by 1 word search
     Then I should see the following word search:
       | r e d R E D |
-
+  
+  Scenario: not enough space
+    Given there are words purple
+    And I have the grid
+      | r e d . . . |
+    When I generate a 6 by 1 word search
+    Then I should see the following word search:
+      | r e d . . . |
+    And the word search should not be valid
+      
   Scenario: invalid size
     Given there are words longlonglongword,evenmuchlongerthanbeforeword
     When I generate a 1 by 5 word search

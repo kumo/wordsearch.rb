@@ -37,10 +37,10 @@ class WordSearch
   
   # Place in a word somewhere in the grid. For now it cannot place words backwards
   def place_word_horizontally(word)
-    length_of_word = word.size
+    word_length = word.size
     
     # If the word is longer than the grid then it cannot be used
-    if length_of_word > @last_width
+    if word_length > @last_width
       @invalid_words += 1
       return
     end
@@ -50,28 +50,35 @@ class WordSearch
     # 2. check if there is space on that row for the word
     # 3. choose a position
     
-    possible_row = @grid[rand(@last_height)]
+    checks = Array.new(@last_height) {|i| 0}
     
+    while (checks.inject(0) { |s,v| s += v } < checks.size) do
+      possible_row_position = rand(@last_height)
+      possible_row = @grid[possible_row_position]
     
-    
-    # Since the word is of a certain length then it can be placed on a certain position
-    # on a row. Basically from 0 to line length - word length
-    #puts "word is #{length_of_word} and line is #{@last_width}. Position is from 0 to #{@last_width - length_of_word}"
-    maximum_column = @last_width - length_of_word
-    
-    if maximum_column == 0
-      possible_column = 0
-    else
-      possible_column = rand(@last_width - length_of_word)
+      if maximum_word_length_for_string(possible_row.join) >= word_length
+        #puts "row #{possible_row_position} looks fine (#{possible_row})"
+        
+        # need to find where to put it
+        column = -1
+        possible_row.each_with_index {|char, index|
+          if char == '.'
+            column = index if column == -1
+          end
+        }
+        word_length.times do |i|
+          possible_row[column + i] = word[i,1]
+        end
+
+        return
+      else
+        #puts "skipping row #{possible_row_position}"
+      end
+      checks[possible_row_position] = 1
     end
-    possible_row = rand(@last_height)
     
-    #puts "placing word at #{possible_column}, #{possible_row}"
-    
-    row = @grid[possible_row]
-    length_of_word.times do |i|
-      row[possible_column + i] = word[i,1]
-    end
+    # shouldn't be here so word was invalid
+    @invalid_words += 1
   end
   
   def to_a
@@ -110,13 +117,22 @@ class WordSearch
   
   def available_spaces_for_row(i)
     row = @grid[i].join
-    spaces = row.scan(/\.+/).map{|group| group.size}
+    available_spaces_for_string(row)
+  end
+  
+  def available_spaces_for_string(str)
+    spaces = str.scan(/\.+/).map{|group| group.size}
 
     spaces == [] ? [0] : spaces
   end
   
   def maximum_word_length_for_row(i)
     spaces = available_spaces_for_row(i)
+    spaces.sort[-1]
+  end
+
+  def maximum_word_length_for_string(str)
+    spaces = available_spaces_for_string(str)
     spaces.sort[-1]
   end
 end
