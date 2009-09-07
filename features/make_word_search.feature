@@ -5,7 +5,7 @@ Feature: making a wordsearch
   
   Scenario: no words specified
     Given there are no words
-    When I generate a 5 by 5 word search
+    When I generate a 5 by 5 word search with spaces
     Then I should see the following word search:
       | . . . . . |
       | . . . . . |
@@ -15,7 +15,7 @@ Feature: making a wordsearch
 
   Scenario: non-square grid
     Given there are no words
-    When I generate a 4 by 3 word search
+    When I generate a 4 by 3 word search with spaces
     Then I should see the following word search:
       | . . . . |
       | . . . . |
@@ -23,7 +23,7 @@ Feature: making a wordsearch
   
   Scenario: forced position
     Given there are words longword
-    When I generate a 8 by 1 word search
+    When I generate a 8 by 1 word search with spaces
     Then I should see the following word search:
       | L O N G W O R D |
 
@@ -31,7 +31,7 @@ Feature: making a wordsearch
     Given there are words red
     And I have the grid
       | r e d . . . |
-    When I generate a 6 by 1 word search
+    When I generate a 6 by 1 word search with spaces
     Then I should see the following word search:
       | r e d R E D |
   
@@ -39,12 +39,12 @@ Feature: making a wordsearch
     Given there are words purple
     And I have the grid
       | r e d . . . |
-    When I generate a 6 by 1 word search
+    When I generate a 6 by 1 word search with spaces
     Then I should see the following word search:
       | r e d . . . |
     And the word search should not be valid
       
   Scenario: invalid size
     Given there are words longlonglongword,evenmuchlongerthanbeforeword
-    When I generate a 1 by 5 word search
+    When I generate a 1 by 5 word search with spaces
     Then the word search should not be valid

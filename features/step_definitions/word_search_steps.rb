@@ -19,10 +19,12 @@ When /^I generate a (\d+) by (\d+) word search$/ do |x, y|
   @ws.generate(x.to_i, y.to_i)
 end
 
+When /^I generate a (\d+) by (\d+) word search with spaces$/ do |x, y|
+  @ws.generate_with_spaces(x.to_i, y.to_i)
+end
+
 Then /^I should see the following word search:$/ do |table|
-  # table is a Cucumber::Ast::Table
-  #p table.raw 
-  table.diff!(@ws.to_a)
+  table.diff!(@ws.to_strings)
 end
 
 Then /^the word search should not be valid$/ do
@@ -63,3 +65,15 @@ Then /^the longest word for each column should be as follows:$/ do |table|
   end
 end
 
+Then /^the word search should match the following:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  new_table = @ws.to_a
+  
+  @ws.height.times do |i|
+    @ws.width.times do |j|
+      #puts "grid contains #{new_table[i][j]} and match is #{table.raw[i][j]}"
+      #puts "result of match is #{Regexp.new(table.raw[i][j]) =~ new_table[i][j]}"
+      (Regexp.new(table.raw[i][j]) =~ new_table[i][j]).should == 0
+    end
+  end
+end

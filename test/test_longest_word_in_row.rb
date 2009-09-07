@@ -7,7 +7,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
   end
 
   def test_empty_row
-    @word_search.generate(6,6)
+    @word_search.generate_with_spaces(6,6)
     assert_equal @word_search.maximum_word_length_for_row(0), 6
     assert_equal @word_search.maximum_word_length_for_row(1), 6
     assert_equal @word_search.maximum_word_length_for_row(2), 6
@@ -18,7 +18,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
   
   def test_count_no_space_left
     @word_search.add_grid([['r e d'],['r e d'],['r e d']], 3, 3)
-    @word_search.generate(3,3)
+    @word_search.generate_with_spaces(3,3)
     assert_equal @word_search.maximum_word_length_for_row(0), 0
     assert_equal @word_search.maximum_word_length_for_row(1), 0
     assert_equal @word_search.maximum_word_length_for_row(2), 0
@@ -26,7 +26,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
 
   def test_spaces_at_both_ends
     @word_search.add_grid([['. . .'], ['r r r'], ['. . .']], 3, 3)
-    @word_search.generate(3,3)
+    @word_search.generate_with_spaces(3,3)
     assert_equal @word_search.maximum_word_length_for_row(0), 3
     assert_equal @word_search.maximum_word_length_for_row(1), 0
     assert_equal @word_search.maximum_word_length_for_row(2), 3
@@ -34,7 +34,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
 
   def test_space_at_end_of_row
     @word_search.add_grid([['r . .'], ['e . .'], ['d . .']], 3, 3)
-    @word_search.generate(3,3)
+    @word_search.generate_with_spaces(3,3)
     assert_equal @word_search.maximum_word_length_for_row(1), 2
     assert_equal @word_search.maximum_word_length_for_row(2), 2
     assert_equal @word_search.maximum_word_length_for_row(0), 2
@@ -42,7 +42,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
 
   def test_space_at_start_of_row
     @word_search.add_grid([['. . r'], ['. . e'], ['. . d']], 3, 3)
-    @word_search.generate(3,3)
+    @word_search.generate_with_spaces(3,3)
     assert_equal @word_search.maximum_word_length_for_row(0), 2
     assert_equal @word_search.maximum_word_length_for_row(1), 2
     assert_equal @word_search.maximum_word_length_for_row(2), 2
@@ -50,7 +50,7 @@ class TestLongestWordInRow < Test::Unit::TestCase
   
   def test_spaces_between_words
     @word_search.add_grid([['b . . p'], ['l . . i'], ['u . . n'], ['e . .k']], 4, 4)
-    @word_search.generate(4,4)
+    @word_search.generate_with_spaces(4,4)
     assert_equal @word_search.maximum_word_length_for_row(0), 2
     assert_equal @word_search.maximum_word_length_for_row(1), 2
     assert_equal @word_search.maximum_word_length_for_row(2), 2

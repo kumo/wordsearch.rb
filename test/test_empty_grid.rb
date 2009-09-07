@@ -13,12 +13,12 @@ class TestEmptyGrid < Test::Unit::TestCase
   end
 
   def test_square_grid
-    @word_search.generate(3,3)
-    assert_equal [". . .",". . .", ". . ."], @word_search.to_a
+    @word_search.generate_with_spaces(3,3)
+    assert_equal [%w{. . .}, %w{. . .}, %w{. . .}], @word_search.to_a
   end
 
   def test_rect_grid
-    @word_search.generate(5,2)
-    assert_equal [". . . . .",". . . . ."], @word_search.to_a
+    @word_search.generate_with_spaces(5,2)
+    assert_equal [%w{. . . . .},%w{. . . . .}], @word_search.to_a
   end
 end

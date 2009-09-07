@@ -4,6 +4,7 @@ class WordSearch
     @grid = []
     @invalid_words = 0
     @clobber_grid = true
+    @letters_used = []
   end
   
   # Helper/Tester method for pre-initialising a grid
@@ -24,7 +25,7 @@ class WordSearch
     @words.flatten!
   end
   
-  def generate(width, height)
+  def generate(width, height, should_fill_empty_spaces=true)
     @last_width = width
     @last_height = height
     
@@ -33,6 +34,14 @@ class WordSearch
     @words.each do |word|
       place_word_horizontally(word.upcase)
     end
+    
+    fill_empty_spaces if should_fill_empty_spaces
+    
+    valid?
+  end
+  
+  def generate_with_spaces(width, height)
+    generate(width, height, false)
   end
   
   # Place in a word somewhere in the grid. For now it cannot place words backwards
@@ -69,6 +78,8 @@ class WordSearch
         word_length.times do |i|
           possible_row[column + i] = word[i,1]
         end
+        
+        remember_used_letters(word)
 
         return
       else
@@ -82,6 +93,10 @@ class WordSearch
   end
   
   def to_a
+    return @grid
+  end
+
+  def to_strings
     result = []
     
     for row in @grid do
@@ -144,5 +159,30 @@ class WordSearch
   def maximum_word_length_for_string(str)
     spaces = available_spaces_for_string(str)
     spaces.sort[-1]
+  end
+  
+  def remember_used_letters(word)
+    @letters_used << word.split('')
+  end
+  
+  def letters_used
+    @letters_used.flatten.sort.uniq
+  end
+  
+  def fill_empty_spaces
+    letters_to_choose_from = letters_used
+    
+    @grid.each do |row|
+      row.collect! {|char| char == '.' ? letters_to_choose_from[rand(letters_to_choose_from.size)] : char} 
+      #row.each do |char|
+      #  puts "char is #{char}"
+      #  if char == '.'
+      #    char = letters_to_choose_from[rand(letters_to_choose_from.size)] if char == '.'
+      #    puts "choosing random letter #{char}"
+      #  else
+      #    puts "skipping #{char}"
+      #  end
+      #end
+    end
   end
 end

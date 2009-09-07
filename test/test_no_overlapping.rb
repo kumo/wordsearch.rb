@@ -11,7 +11,7 @@ class TestNoOverlapping < Test::Unit::TestCase
     @word_search.add_grid([['r e d . . .']], 6, 1)
     
     @word_search.generate(6,1)
-    assert_equal ["r e d R E D"], @word_search.to_a
+    assert_equal [%w{r e d R E D}], @word_search.to_a
     assert_equal true, @word_search.valid?
   end
 
@@ -20,7 +20,7 @@ class TestNoOverlapping < Test::Unit::TestCase
     @word_search.add_grid([['r e d . . .'], ['. . . r e d']], 6, 2)
     
     @word_search.generate(6,2)
-    assert_equal ["r e d R E D", "R E D r e d"], @word_search.to_a
+    assert_equal [%w{r e d R E D}, %w{R E D r e d}], @word_search.to_a
     assert_equal true, @word_search.valid?
   end
 
