@@ -1,7 +1,7 @@
 require 'test/unit'
 require File.join(File.dirname(__FILE__), *%w[.. lib word_search])
 
-class TestCountAvailableSpaces < Test::Unit::TestCase
+class TestCountAvailableSpacesInRow < Test::Unit::TestCase
   def setup
     @word_search = WordSearch.new
   end

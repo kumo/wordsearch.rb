@@ -3,17 +3,18 @@ Feature: counting available spaces
   I have to know how many spaces there are
   So I can drive people crazy
   
-  Scenario Outline: empty row
+  Scenario Outline: empty grid
     Given there are no words
     When I generate a <width> by <height> word search
     Then each row should have <expected> spaces
-    And the largest word for each row is <expected_length> characters
+    And the largest word for each row is <expected_row> characters
+    And the largest word for each column is <expected_column> characters
 
   Examples:
-    | width | height | expected | expected_length |
-    | 5     | 5      | 5        | 5               |
-    | 1     | 1      | 1        | 1               |
-    | 10    | 4      | 10       | 10              |
+    | width | height | expected | expected_row | expected_column |
+    | 5     | 5      | 5        | 5            | 5               |
+    | 1     | 1      | 1        | 1            | 1               |
+    | 10    | 4      | 10       | 10           | 4               |
     
   Scenario: existing grid
     Given there are no words
@@ -26,3 +27,10 @@ Feature: counting available spaces
       | 3 |
       | 2 |
       | 3 |
+    And the longest word for each column should be as follows:
+      | 2 |
+      | 1 |
+      | 1 |
+      | 1 |
+      | 2 |
+      | 2 |

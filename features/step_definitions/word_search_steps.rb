@@ -10,7 +10,7 @@ Given /^I have the grid$/ do |table|
   width = table.raw[0][0].split(' ').size
   height = table.raw.size
   
-  puts "we have a #{width} by #{height} table"
+  #puts "we have a #{width} by #{height} table"
   
   @ws.add_grid(table.raw, width, height)
 end
@@ -48,3 +48,18 @@ Then /^the longest word for each line should be as follows:$/ do |table|
     @ws.maximum_word_length_for_row(i).should == row[0].to_i
   end
 end
+
+Then /^the largest word for each column is (\d+) characters$/ do |count|
+  @ws.width.times do |i|
+    @ws.maximum_word_length_for_column(i).should == count.to_i
+  end
+end
+
+Then /^the longest word for each column should be as follows:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  table.raw.size.times do |i|
+    values = table.raw[i]
+    @ws.maximum_word_length_for_column(i).should == values[0].to_i
+  end
+end
+

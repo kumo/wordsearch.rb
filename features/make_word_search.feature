@@ -27,7 +27,6 @@ Feature: making a wordsearch
     Then I should see the following word search:
       | L O N G W O R D |
 
-  @wip
   Scenario: no overlapping
     Given there are words red
     And I have the grid

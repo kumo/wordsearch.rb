@@ -119,6 +119,11 @@ class WordSearch
     row = @grid[i].join
     available_spaces_for_string(row)
   end
+
+  def available_spaces_for_column(i)
+    column = @grid.collect {|row| row[i]}.join
+    available_spaces_for_string(column)
+  end
   
   def available_spaces_for_string(str)
     spaces = str.scan(/\.+/).map{|group| group.size}
@@ -128,6 +133,11 @@ class WordSearch
   
   def maximum_word_length_for_row(i)
     spaces = available_spaces_for_row(i)
+    spaces.sort[-1]
+  end
+
+  def maximum_word_length_for_column(i)
+    spaces = available_spaces_for_column(i)
     spaces.sort[-1]
   end
 
