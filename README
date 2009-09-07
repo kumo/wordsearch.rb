@@ -1,1 +1,14 @@
-A simple wordsearch generator
+A simple word search generator
+
+=> ws = WordSearch.new(%w{one two three four five six seven eight nine ten})
+=> ws.generate(8,8)
+=> ws.to_strings
+
+F N I N E T E N
+E S E V E N T I
+T V O N E S I X
+N T W O X E T N
+N R V F O U R H
+T W F I V E H I
+F F U E I G H T
+E T H R E E E U
