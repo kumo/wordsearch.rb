@@ -4,13 +4,11 @@ A simple word search generator
 # ws.generate(8,8)
 # ws.to_strings
 
-F N I N E T E N
-E S E V E N T I
-T V O N E S I X
-N T W O X E T N
-N R V F O U R H
-T W F I V E H I
-F F U E I G H T
-E T H R E E E U
-
-Note: only places words horizontally for now
+S E S E I G H T
+E N W I T F T U
+V I R N E I H O
+E N R N N V R H
+N E S I X E E S
+T W O E X I E S
+T F O U R F E E
+V G O N E G W W

@@ -2,7 +2,7 @@ class WordSearch
   def initialize(words = [])
     @words = words
     @grid = []
-    @invalid_words = 0
+    @invalid_words = []
     @clobber_grid = true
     @letters_used = []
   end
@@ -31,10 +31,8 @@ class WordSearch
     
     generate_empty_grid unless !@clobber_grid
     
-    @words.each do |word|
-      place_word_horizontally(word.upcase)
-    end
-    
+    place_words
+
     fill_empty_spaces if should_fill_empty_spaces
     
     valid?
@@ -44,14 +42,31 @@ class WordSearch
     generate(width, height, false)
   end
   
+  def place_words
+    @words.each do |word|
+      if rand(2) == 1
+        if !place_word_horizontally(word.upcase)
+          if !place_word_vertically(word.upcase)
+            @invalid_words << word
+          end
+        end
+      else
+        if !place_word_vertically(word.upcase)
+          if !place_word_horizontally(word.upcase)
+            @invalid_words << word
+          end
+        end
+      end
+    end
+  end
+  
   # Place in a word somewhere in the grid. For now it cannot place words backwards
   def place_word_horizontally(word)
     word_length = word.size
     
     # If the word is longer than the grid then it cannot be used
     if word_length > @last_width
-      @invalid_words += 1
-      return
+      return false
     end
     
     # Simple algorithm:
@@ -74,7 +89,7 @@ class WordSearch
         
         remember_used_letters(word)
 
-        return
+        return true
       else
         #puts "skipping row #{possible_row_position}"
       end
@@ -82,9 +97,50 @@ class WordSearch
     end
     
     # shouldn't be here so word was invalid
-    @invalid_words += 1
+    return false
   end
   
+  # Place in a word somewhere in the grid. For now it cannot place words backwards
+  def place_word_vertically(word)
+    word_length = word.size
+    
+    # If the word is higher than the grid then it cannot be used
+    if word_length > @last_height
+      return false
+    end
+    
+    # Simple algorithm:
+    # 1. choose a column
+    # 2. check if there is space on that column for the word
+    # 3. choose a position
+    
+    checked_cols = Array.new(@last_width) {|i| 0}
+    
+    while (checked_cols.inject(0) { |s,v| s += v } < checked_cols.size) do
+      possible_col_position = rand(@last_width)
+      possible_col_contents = @grid.collect {|row| row[possible_col_position]}.join
+      
+    
+      if maximum_word_length_for_string(possible_col_contents) >= word_length
+        possible_row_positions = positions_for_word_in_string(word, possible_col_contents)
+        row_position = possible_row_positions[rand(possible_row_positions.size)]
+
+        word_length.times do |i|
+          @grid[row_position+i][possible_col_position] = word[i,1]
+        end
+        
+        remember_used_letters(word)
+
+        return true
+      else
+        #puts "skipping row #{possible_row_position}"
+      end
+      checked_cols[possible_col_position] = 1
+    end
+    
+    return false
+  end
+    
   def to_a
     return @grid
   end
@@ -100,7 +156,7 @@ class WordSearch
   end
   
   def valid?
-    @invalid_words == 0 && @last_height > 0 && @last_width > 0
+    @invalid_words.size == 0 && @last_height > 0 && @last_width > 0
   end
   
   def generate_empty_grid
