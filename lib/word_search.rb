@@ -59,24 +59,17 @@ class WordSearch
     # 2. check if there is space on that row for the word
     # 3. choose a position
     
-    checks = Array.new(@last_height) {|i| 0}
+    checked_rows = Array.new(@last_height) {|i| 0}
     
-    while (checks.inject(0) { |s,v| s += v } < checks.size) do
+    while (checked_rows.inject(0) { |s,v| s += v } < checked_rows.size) do
       possible_row_position = rand(@last_height)
       possible_row = @grid[possible_row_position]
     
       if maximum_word_length_for_string(possible_row.join) >= word_length
-        #puts "row #{possible_row_position} looks fine (#{possible_row})"
-        
-        # need to find where to put it
-        column = -1
-        possible_row.each_with_index {|char, index|
-          if char == '.'
-            column = index if column == -1
-          end
-        }
+        possible_col_positions = positions_for_word_in_string(word, possible_row.join)
+        col_position = possible_col_positions[rand(possible_col_positions.size)]
         word_length.times do |i|
-          possible_row[column + i] = word[i,1]
+          possible_row[col_position + i] = word[i,1]
         end
         
         remember_used_letters(word)
@@ -85,7 +78,7 @@ class WordSearch
       else
         #puts "skipping row #{possible_row_position}"
       end
-      checks[possible_row_position] = 1
+      checked_rows[possible_row_position] = 1
     end
     
     # shouldn't be here so word was invalid
@@ -145,6 +138,35 @@ class WordSearch
 
     spaces == [] ? [0] : spaces
   end
+
+  def available_spaces_for_string_as_hashes(str)
+    spaces = []
+    in_a_space = false
+    length = 0
+    start = 0
+    str.split('').each_with_index {|char, index|
+      if char == '.'
+        if in_a_space
+          length += 1
+        else
+          in_a_space = true
+          start = index
+          length = 1
+        end
+      else
+        if in_a_space # save existing one
+          in_a_space = false
+          spaces << {:start => start, :length => length}
+        end
+      end
+    }
+    
+    if in_a_space
+      spaces << {:start => start, :length => length}
+    end
+    
+    spaces
+  end
   
   def maximum_word_length_for_row(i)
     spaces = available_spaces_for_row(i)
@@ -184,5 +206,30 @@ class WordSearch
       #  end
       #end
     end
+  end
+  
+  def positions_for_word_in_string(word, string)
+    return [] if word.size > string.size or maximum_word_length_for_string(word) > string.size
+    # 1. if the word is bigger than the string then we cannot do anything
+    # 2. if the word is the same length as the string then only one position
+    # 3. if the word is shorter than the string then string length - word length positions
+    #    e.g. fish in  ...... (6) can go fish.., .fish., ..fish (6-4+1)
+    # 4. if there are multiple spaces then each space must be checked
+    #    e.g. cat in ..dog...cow.... can go ..dogCATcow...., ..dog...cowCAT., ..dog...cow.CAT 
+    
+    spaces = available_spaces_for_string_as_hashes(string)
+    positions = []
+    
+    spaces.each do |space|
+      if space[:length] > word.size
+        space[:start].upto(space[:length] - word.size) do |i|
+          positions << space[:start] + i
+        end
+      elsif space[:length] == word.size
+        positions << space[:start]
+      end
+    end
+    
+    positions
   end
 end
