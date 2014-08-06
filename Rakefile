@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'cucumber/rake/task'
 
 Cucumber::Rake::Task.new do |t|
