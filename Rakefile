@@ -19,5 +19,5 @@ end
 
 desc "Open an irb session preloaded with this library"
 task :console do
-  sh "irb -rubygems -r ./lib/word_search.rb"
+  sh "irb -r ./lib/word_search.rb"
 end

@@ -1,7 +1,9 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "cucumber"
-gem "rake"
+group :test do
+  gem 'rake'
+  gem 'cucumber'
+end
 
 # gem "rails"
